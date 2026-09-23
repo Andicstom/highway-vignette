@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Vignette</string>
+    <string name="cd_back_button">vissza</string>
+    <string name="cd_vihicle_type">jármű típus</string>
+    <string name="vignette_title">Országos matricák</string>
+    <string name="county_selector">Éves vármegyei matricák</string>
+    <string name="county_title">Éves vármegyei matricák</string>
+    <string name="purchase">Vásárlás</string>
+    <string name="next">Tovább</string>
+    <string name="cancel">Mégsem</string>
+    <string name="ok">Rendben</string>
+    <string name="total_purchase_value">Fizetendő összeg</string>
+    <string name="cd_next_arrow">next arrow</string>
+    <string name="order_screen_title">Vásárlás megerősítése</string>
+    <string name="plate">Rendszám</string>
+    <string name="vignette_type">Matrica típusa</string>
+    <string name="usage_price">Rendszerhasználati díj</string>
+    <string name="cd_confetti">confetti</string>
+    <string name="vignette_purchase_successfull">A matricákat sikeresen kifizetted!</string>
+    <string name="error_message">Hiba történt!</string>
+    <string name="appbar_title">E-matrica</string>
+    <string name="cd_hungary_map">Magyarország térképe</string>
+</resources>

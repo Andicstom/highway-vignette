@@ -1,0 +1,8 @@
+package com.example.vignette.feature.purchase.data.api.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class VignetteOrderRequestData(
+    val highwayOrders: List<VignetteOrderItemRequestData>,
+)
