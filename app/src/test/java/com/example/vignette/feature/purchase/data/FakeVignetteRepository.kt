@@ -1,6 +1,7 @@
 package com.example.vignette.feature.purchase.data
 
 import com.example.vignette.feature.purchase.data.repository.VignetteRepository
+import com.example.vignette.feature.purchase.data.repository.model.County
 import com.example.vignette.feature.purchase.data.repository.model.VehicleProfile
 import com.example.vignette.feature.purchase.data.repository.model.VignetteProduct
 import com.example.vignette.feature.purchase.data.repository.model.VignetteTypes
@@ -78,5 +79,9 @@ class FakeVignetteRepository : VignetteRepository {
 
     override suspend fun getVehicleProfile(): Result<VehicleProfile> {
         return vehicleProfileResult
+    }
+
+    override fun areCountiesNeighbours(counties: List<County>): Boolean {
+        return true
     }
 }

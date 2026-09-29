@@ -4,9 +4,10 @@ import com.example.vignette.feature.purchase.data.api.model.HighwayInfoResponseD
 import com.example.vignette.feature.purchase.data.api.model.HighwayPayloadResponseData
 import com.example.vignette.feature.purchase.data.repository.DefaultVignetteRepository
 import com.example.vignette.feature.purchase.data.repository.VignetteRepository
-import junit.framework.TestCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -21,6 +22,7 @@ val highwayInfoResponse1 = HighwayInfoResponseData(
     )
 )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class VignetteRepositoryImplTest {
     private lateinit var vignetteApi: FakeVignetteNetworkApi
     private lateinit var vignetteRepository: VignetteRepository
@@ -43,8 +45,8 @@ class VignetteRepositoryImplTest {
 
         val result = vignetteRepository.getCountyVignetteProducts()
 
-        TestCase.assertTrue(result.isFailure)
-        TestCase.assertSame(exception, result.exceptionOrNull())
+        Assert.assertTrue(result.isFailure)
+        Assert.assertSame(exception, result.exceptionOrNull())
     }
 
     @Test
@@ -55,6 +57,6 @@ class VignetteRepositoryImplTest {
 
         val result = vignetteRepository.getCountyVignetteProducts()
 
-        TestCase.assertTrue(result.isSuccess)
+        Assert.assertTrue(result.isSuccess)
     }
 }

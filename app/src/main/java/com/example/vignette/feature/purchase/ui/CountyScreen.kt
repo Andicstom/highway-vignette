@@ -1,7 +1,6 @@
 package com.example.vignette.feature.purchase.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +37,7 @@ import com.example.vignette.core.ui.component.VignetteButton
 import com.example.vignette.core.ui.component.VignetteTitle
 import com.example.vignette.core.ui.theme.VignetteTheme
 import com.example.vignette.core.util.toPriceText
+import com.example.vignette.feature.purchase.ui.map.HungaryMap
 
 @Composable
 fun CountyScreen(
@@ -49,12 +48,18 @@ fun CountyScreen(
 
     val context = LocalContext.current
     val errorMessage = stringResource(R.string.error_message)
+    val countiesAreNotNeighboursMessage = stringResource(R.string.counties_not_neighbours)
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect { event ->
             when (event) {
                 is UiEvent.ShowErrorToast -> {
                     Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+
+                is UiEvent.ShowCountiesNotNeighboursToast -> {
+                    Toast.makeText(context, countiesAreNotNeighboursMessage, Toast.LENGTH_SHORT)
+                        .show()
                 }
 
                 else -> {}
@@ -93,7 +98,11 @@ fun CountyScreenContent(
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        HungaryMap()
+        HungaryMapContent(
+            counties = counties,
+            selectedCounties = selectedCounties,
+            onCountySelected = onCountyClick,
+        )
 
         Spacer(modifier = Modifier.height(22.dp))
 
@@ -123,12 +132,27 @@ fun CountyScreenContent(
 }
 
 @Composable
-fun HungaryMap() {
-    Image(
-        modifier = Modifier.fillMaxWidth(),
-        painter = painterResource(id = R.drawable.hungary_map),
-        contentDescription = stringResource(R.string.cd_hungary_map),
-    )
+fun HungaryMapContent(
+    modifier: Modifier = Modifier,
+    counties: List<CountyUiData> = emptyList(),
+    selectedCounties: List<CountyUiData> = emptyList(),
+    onCountySelected: (county: CountyUiData) -> Unit = {},
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+        HungaryMap(
+            counties = counties.toCountyPathList(),
+            selectedCounties = selectedCounties.toCountyPathList().map { it.id },
+            onCountySelected = { countyId ->
+                val county = counties.firstOrNull { it.id == countyId }
+                if (county != null) {
+                    onCountySelected(county)
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -192,53 +216,139 @@ fun CountyItem(
 @Composable
 private fun CountyScreenPreview() {
     VignetteTheme {
-        Box(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+        Column(
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
         ) {
             CountyScreenContent(
                 openOrderScreen = {},
                 counties = listOf(
                     CountyUiData(
-                        id = "1",
+                        id = "YEAR_11",
+                        name = "Bács-Kiskun",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_12",
                         name = "Baranya",
                         price = 5720,
                         transactionFee = 120,
                     ),
                     CountyUiData(
-                        id = "2",
-                        name = "Somogy",
-                        price = 0,
-                        transactionFee = 120,
-                    ),
-                    CountyUiData(
-                        id = "3",
-                        name = "Zala",
+                        id = "YEAR_13",
+                        name = "Békés",
                         price = 5720,
                         transactionFee = 120,
                     ),
                     CountyUiData(
-                        id = "4",
+                        id = "YEAR_14",
+                        name = "Borsod-Abaúj-Zemplén",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_15",
+                        name = "Csongrád-Csanád",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_16",
+                        name = "Fejér",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_17",
+                        name = "Győr-Moson-Sopron",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_18",
+                        name = "Hajdú-Bihar",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_19",
+                        name = "Heves",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_20",
+                        name = "Jász-Nagykun-Szolnok",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_21",
+                        name = "Komárom-Esztergom",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_22",
+                        name = "Nógrád",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_23",
+                        name = "Pest",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_24",
+                        name = "Somogy",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_25",
+                        name = "Szabolcs-Szatmár-Bereg",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_26",
+                        name = "Tolna",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_27",
+                        name = "Vas",
+                        price = 5720,
+                        transactionFee = 120,
+                    ),
+                    CountyUiData(
+                        id = "YEAR_28",
                         name = "Veszprém",
                         price = 5720,
                         transactionFee = 120,
                     ),
                     CountyUiData(
-                        id = "5",
-                        name = "Fejár",
+                        id = "YEAR_29",
+                        name = "Zala",
                         price = 5720,
                         transactionFee = 120,
                     ),
                 ),
                 selectedCounties = listOf(
                     CountyUiData(
-                        id = "1",
+                        id = "YEAR_11",
                         name = "Baranya",
                         price = 5720,
                         transactionFee = 120,
                     ),
                     CountyUiData(
-                        id = "4",
-                        name = "Veszprém",
+                        id = "YEAR_29",
+                        name = "Zala",
                         price = 5720,
                         transactionFee = 120,
                     ),

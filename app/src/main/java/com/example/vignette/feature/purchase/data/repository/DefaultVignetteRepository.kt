@@ -2,9 +2,11 @@ package com.example.vignette.feature.purchase.data.repository
 
 import com.example.vignette.di.IODispatcher
 import com.example.vignette.feature.purchase.data.api.VignetteNetworkApi
+import com.example.vignette.feature.purchase.data.repository.model.County
 import com.example.vignette.feature.purchase.data.repository.model.VehicleProfile
 import com.example.vignette.feature.purchase.data.repository.model.VignetteProduct
 import com.example.vignette.feature.purchase.data.repository.model.VignetteTypes
+import com.example.vignette.feature.purchase.data.repository.model.countyGraph
 import com.example.vignette.feature.purchase.data.repository.model.mappers.toDomain
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -62,4 +64,29 @@ class DefaultVignetteRepository @Inject constructor(
                 return@withContext Result.failure(e)
             }
         }
+
+    override fun areCountiesNeighbours(counties: List<County>): Boolean {
+        if (counties.size <= 1) return true
+
+        val start = counties.first().id
+        val visited = mutableSetOf<String>()
+        val queue = ArrayDeque<String>()
+
+        queue.add(start)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+
+            if (!visited.add(current)) continue
+
+            countyGraph[current]
+                .orEmpty()
+                .filter { countyId ->
+                    countyId in counties.map { county -> county.id } && countyId !in visited
+                }
+                .forEach(queue::add)
+        }
+
+        return visited.size == counties.size
+    }
 }

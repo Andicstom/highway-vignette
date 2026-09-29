@@ -56,6 +56,8 @@ fun PurchaseScreen(
                 is UiEvent.ShowErrorToast -> {
                     Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                 }
+
+                else -> {}
             }
         }
     }

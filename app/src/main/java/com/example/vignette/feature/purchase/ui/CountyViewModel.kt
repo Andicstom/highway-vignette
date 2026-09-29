@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.vignette.core.ui.UiEvent
 import com.example.vignette.feature.purchase.data.repository.PurchaseRepository
 import com.example.vignette.feature.purchase.data.repository.VignetteRepository
+import com.example.vignette.feature.purchase.data.repository.model.County
 import com.example.vignette.feature.purchase.data.repository.model.PurchaseItem
 import com.example.vignette.feature.purchase.data.repository.model.VignetteProduct
 import com.example.vignette.feature.purchase.data.repository.model.VignetteTypes
+import com.example.vignette.feature.purchase.ui.map.CountyPath
+import com.example.vignette.feature.purchase.ui.map.getPathForCountyId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.channels.Channel
@@ -24,6 +27,24 @@ data class CountyUiData(
     val price: Long,
     val transactionFee: Long,
 )
+
+fun CountyUiData.toCounty(): County =
+    County(
+        id = id,
+        name = name,
+    )
+
+fun List<CountyUiData>.toCountyList(): List<County> =
+    map { countyUiData -> countyUiData.toCounty() }
+
+fun CountyUiData.toCountyPath(): CountyPath =
+    CountyPath(
+        id = id,
+        path = id.getPathForCountyId(),
+    )
+
+fun List<CountyUiData>.toCountyPathList(): List<CountyPath> =
+    map { countyPath -> countyPath.toCountyPath() }
 
 fun VignetteProduct.toCountyUiData() = CountyUiData(
     id = typeId,
@@ -99,6 +120,14 @@ class CountyViewModel @Inject constructor(
             removePurchase(county)
         } else {
             addPurchase(county)
+        }
+
+        val checkIfCountiesAreNeighbours = vignetteRepository.areCountiesNeighbours(
+            counties = newSelectedCounties.toCountyList(),
+        )
+
+        if (!checkIfCountiesAreNeighbours) {
+            _uiEvents.trySend(UiEvent.ShowCountiesNotNeighboursToast)
         }
 
         _uiState.update { uiState ->

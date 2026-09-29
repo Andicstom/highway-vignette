@@ -18,6 +18,7 @@
     <string name="cd_confetti">confetti</string>
     <string name="vignette_purchase_successfull">A matricákat sikeresen kifizetted!</string>
     <string name="error_message">Hiba történt!</string>
+    <string name="counties_not_neighbours">Vármegyék nem szomszédosak!</string>
     <string name="appbar_title">E-matrica</string>
     <string name="cd_hungary_map">Magyarország térképe</string>
 </resources>
