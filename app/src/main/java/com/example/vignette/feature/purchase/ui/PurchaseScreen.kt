@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.vignette.R
 import com.example.vignette.core.ui.UiEvent
 import com.example.vignette.core.ui.component.ButtonType
@@ -44,7 +45,7 @@ fun PurchaseScreen(
     onBack: () -> Unit,
     openSuccessScreen: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val errorMessage = stringResource(R.string.error_message)
